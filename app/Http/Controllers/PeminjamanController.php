@@ -8,7 +8,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class PeminjamanController extends Controller
 {
-    // coba data
+    // function peminjaman
     public function peminjaman(Request $request){
         $data_pinjam = PeminjamanUser::get();
 
