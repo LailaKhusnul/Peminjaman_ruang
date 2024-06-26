@@ -17,7 +17,7 @@ class Ruang extends Model
     ];
 
     // Definisikan relasi Ruang dengan PeminjamanUser
-    public function peminjamanusers()
+    public function peminjaman()
     {
         return $this->hasMany(PeminjamanUser::class, 'id_ruang');
     }

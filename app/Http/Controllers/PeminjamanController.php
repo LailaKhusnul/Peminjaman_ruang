@@ -25,23 +25,23 @@ class PeminjamanController extends Controller
 
     public function index()
     {
-        $peminjaman = PeminjamanUser::with(['user', 'ruang'])->where('status', 'pending')->get();
+        $data_pinjam = PeminjamanUser::with(['user', 'ruang'])->where('status', 'pending')->get();
         return view('admin.peminjaman.index', compact('peminjaman'));
     }
 
     public function approve($id)
     {
-        $peminjaman = PeminjamanUser::find($id);
-        $peminjaman->status = 'approved';
-        $peminjaman->save();
+        $data_pinjam = PeminjamanUser::find($id);
+        $data_pinjam->status = 'approved';
+        $data_pinjam->save();
         return redirect()->route('peminjaman.index2')->with('success', 'Peminjaman disetujui.');
     }
 
     public function reject($id)
     {
-        $peminjaman = PeminjamanUser::find($id);
-        $peminjaman->status = 'rejected';
-        $peminjaman->save();
+        $data_pinjam = PeminjamanUser::find($id);
+        $data_pinjam->status = 'rejected';
+        $data_pinjam->save();
         return redirect()->route('peminjaman.index2')->with('success', 'Peminjaman ditolak.');
     }
 }

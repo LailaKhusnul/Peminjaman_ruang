@@ -72,7 +72,18 @@
                           <td>{{ $d->tanggal_mulai }}</td>
                           <td>{{ $d->tanggal_selesai }}</td>
                           <td>{{ $d->kegiatan }}</td>
-                          <td>{{ $d->status }}</td>
+                          <!-- <td>{{ $d->status }}</td> -->
+                          <!-- Untuk menampilkan kondisi dan juga teks yang lebih user-friendly -->
+                          <td>
+                            @if($d->status == 'pending')
+                              <span class="badge badge-warning">PENDING</span>
+                            @elseif($d->status == 'approved')
+                              <span class="badge badge-success">APPROVED</span>
+                            @elseif($d->status == 'rejected')
+                              <span class="badge badge-danger">REJECTED</span>
+                            @endif
+                          </td>
+                          <!-- Untuk memberi aksi kondisi -->
                           <td>
                             @if($d->status == 'pending')
                               <form action="{{ route('peminjaman.approve', $d->id) }}" method="POST" style="display:inline-block;">
@@ -90,14 +101,14 @@
                           <td>
                               <!-- <a href="{{ route('ruangan.edit',['id' => $d->id]) }}" class="btn btn-primary"><i class="fas fa-pen"></i>Edit</a> -->
                             @if($d->status == 'pending')
-                              <!-- Tombol untuk menampilkan modal edit -->
-                              <button class="btn btn-primary" data-toggle="modal" data-target="#editPeminjamanModal{{ $d->id }}"><i class="fas fa-pen"></i>Edit</button>
-                              <a data-toggle="modal" data-target="#modal-hapus{{ $d->id }}" class="btn btn-danger"><i class="fas fa-trash"></i>Hapus</a>                           
+                              <!-- Tombol untuk menampilkan modal edit, jika button kotak class="btn btn-primary" -->
+                              <a class="text-primary mr-2" data-toggle="modal" data-target="#editPeminjamanModal{{ $d->id }}"><i class="fas fa-pen"></i></a>
+                              <a data-toggle="modal" data-target="#modal-hapus{{ $d->id }}" class="text-danger"><i class="fas fa-trash"></i></a>                           
                             @endif
                             </td>
                         </tr>
 
-                        <!-- Modal Edit Ruang -->
+                        <!-- Modal Edit Ruang => BELUM DIPERBAIKI-->
                         <div class="modal fade" id="editPeminjamanModal{{ $d->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                           <div class="modal-dialog" role="document">
                             <div class="modal-content">

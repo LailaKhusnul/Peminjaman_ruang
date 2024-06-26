@@ -33,15 +33,17 @@ class PeminjamanUserController extends Controller
     //     if ($filterType == 'available') {
     //         $ruanganKosong = Ruang::whereDoesntHave('peminjaman', function($query) use ($date) {
     //             $query->whereDate('tanggal_mulai', '<=', $date)
-    //                   ->whereDate('tanggal_selesai', '>=', $date);
+    //                 ->whereDate('tanggal_selesai', '>=', $date);
     //         })->get();
-    //         return view('user.peminjaman.index', ['data_pinjam' => $ruanganKosong]);
+
+    //         return view('user.peminjaman.index', ['data_pinjam' => $ruanganKosong, 'filterType' => $filterType]);
     //     } elseif ($filterType == 'booked') {
     //         $ruanganDipinjam = PeminjamanUser::whereDate('tanggal_mulai', '<=', $date)
     //                                         ->whereDate('tanggal_selesai', '>=', $date)
     //                                         ->with('ruang', 'user')
     //                                         ->get();
-    //         return view('user.peminjaman.index', ['data_pinjam' => $ruanganDipinjam]);
+
+    //         return view('user.peminjaman.index', ['data_pinjam' => $ruanganDipinjam, 'filterType' => $filterType]);
     //     }
 
     //     return redirect()->route('peminjaman.index');
@@ -50,7 +52,7 @@ class PeminjamanUserController extends Controller
     // 
     public function index()
     {
-        $peminjaman = PeminjamanUser::where('user_id', auth()->id())->with(['ruang'])->get();
+        $data_pinjam = PeminjamanUser::where('user_id', auth()->id())->with(['ruang'])->get();
         return view('user.peminjaman.index', compact('peminjaman'));
     }
 

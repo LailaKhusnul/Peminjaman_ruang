@@ -125,8 +125,8 @@
                         <td>
                           <!-- <a href="{{ route('ruangan.edit',['id' => $d->id]) }}" class="btn btn-primary"><i class="fas fa-pen"></i>Edit</a> -->
                           <!-- Tombol untuk menampilkan modal edit -->
-                            <button class="btn btn-primary" data-toggle="modal" data-target="#editRuangModal{{ $d->id }}"><i class="fas fa-pen"></i>Edit</button>
-                            <a data-toggle="modal" data-target="#modal-hapus{{ $d->id }}" class="btn btn-danger"><i class="fas fa-trash"></i>Hapus</a>                           
+                            <a class="text-primary mr-2" data-toggle="modal" data-target="#editRuangModal{{ $d->id }}"><i class="fas fa-pen"></i></a>
+                            <a data-toggle="modal" data-target="#modal-hapus{{ $d->id }}" class="text-danger"><i class="fas fa-trash"></i></a>                           
                         </td>
                         </tr>
 

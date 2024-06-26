@@ -26,25 +26,27 @@
     <section class="content">
       <div class="container-fluid">
       <div class="row">
+        <!-- Filter Data -->
           <!-- <form action="{{ route('peminjaman.filter') }}" method="GET" class="form-inline">
-              <div class="form-group mb-2">
-                  <label for="date" class="sr-only">Date</label>
-                  <input type="date" class="form-control" id="date" name="date" placeholder="Select Date">
-              </div>
-              <div class="form-group mx-sm-3 mb-2">
-                  <label for="filterType" class="sr-only">Filter Type</label>
-                  <select class="form-control" id="filterType" name="filterType">
-                      <option value="available">Ruangan Kosong</option>
-                      <option value="booked">Ruangan Dipinjam</option>
-                  </select>
-              </div>
-              <button type="submit" class="btn btn-primary mb-2">Filter</button>
+            <div class="form-group mb-2">
+                <label for="date" class="sr-only">Date</label>
+                <input type="date" class="form-control" id="date" name="date" placeholder="Select Date" value="{{ request('date') }}">
+            </div>
+            <div class="form-group mx-sm-3 mb-2">
+                <label for="filterType" class="sr-only">Filter Type</label>
+                <select class="form-control" id="filterType" name="filterType">
+                    <option value="available" {{ request('filterType') == 'available' ? 'selected' : '' }}>Ruangan Kosong</option>
+                    <option value="booked" {{ request('filterType') == 'booked' ? 'selected' : '' }}>Ruangan Dipinjam</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary mb-2">Filter</button>
           </form> -->
+        <!-- End Filter Data -->
           <div class="col-12">
             <a href="{{ route('peminjamanuser.create') }}" class="btn btn-primary mb-3" data-toggle="modal" data-target="#tambahPeminjamanuserModal">
             Tambah Pinjam
             </a>
-            <!-- Modal -->
+            <!-- Modal Tambah Pinjam -->
             <div class="modal fade" id="tambahPeminjamanuserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
               <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -100,7 +102,7 @@
                 </div>
               </div>
             </div>
-            <!-- End Modal -->
+            <!-- End Modal Tambah Pinjam-->
             
             <div class="card">
               <div class="card-header">
@@ -122,6 +124,8 @@
                 </div> -->
               </div>
               <!-- /.card-header -->
+              
+              <!-- Tabel Data Peminjaman -->
               <div class="card-body table-responsive p-0">
                 <table class="table table-hover text-nowrap" id="clientside">
                   <thead>
@@ -144,11 +148,21 @@
                           <td>{{ $d->tanggal_mulai }}</td>
                           <td>{{ $d->tanggal_selesai }}</td>
                           <td>{{ $d->kegiatan }}</td>
-                          <td>{{ $d->status }}</td>
+                          <!-- <td>{{ $d->status }}</td> -->
+                          <!-- Untuk menampilkan kondisi dan juga teks yang lebih user-friendly -->
+                          <td>
+                            @if($d->status == 'pending')
+                              <span class="badge badge-warning">PENDING</span>
+                            @elseif($d->status == 'approved')
+                              <span class="badge badge-success">APPROVED</span>
+                            @elseif($d->status == 'rejected')
+                              <span class="badge badge-danger">REJECTED</span>
+                            @endif
+                          </td>
                           <td>
                             <!-- <a href="{{ route('peminjamanuser.edit',['id' => $d->id]) }}" class="btn btn-primary"><i class="fas fa-pen"></i>Edit</a> -->
-                            <!-- Tombol untuk menampilkan modal edit -->
                             @if($d->status == 'pending')
+                            <!-- Tombol untuk menampilkan modal edit -->
                                 <button class="btn btn-primary" data-toggle="modal" data-target="#editPeminjamanUserModal{{ $d->id }}"><i class="fas fa-pen"></i>Edit</button>
                                 <a data-toggle="modal" data-target="#modal-hapus{{ $d->id }}" class="btn btn-danger"><i class="fas fa-trash"></i>Batalkan</a>                           
                             @elseif($d->status == 'approved')
@@ -222,8 +236,7 @@
                                 <form action="{{ route('peminjamanuser.delete',['id' => $d->id]) }}" method="POST">
                                   @csrf
                                   @method('DELETE')
-                                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                  <button type="submit" class="btn btn-primary">Hapus Data</button>
+                                  <button type="submit" class="btn btn-primary">Batalkan</button>
 
                                 </form>
                               </div>

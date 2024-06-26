@@ -21,7 +21,7 @@ class PeminjamanUser extends Model
     // Definisi relasi ke model Ruang
     public function Ruang()
     {
-        return $this->belongsTo(Ruang::class, 'id_ruang',);
+        return $this->belongsTo(Ruang::class, 'id_ruang');
     }
 
     // Definisi relasi ke model User

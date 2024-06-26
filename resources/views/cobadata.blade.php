@@ -196,15 +196,15 @@
                                   @error('role_type')
                                     <small>{{ $message }}</small>
                                   @enderror
-                                <div class="card-footer">
-                                  <button type="submit" class="btn btn-primary">Submit</button>
-                                </div>
-                              </form>
+                                  <div class="card-footer">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                  </div>
+                                </form>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                      <!-- End Modal Edit Ruang -->
+                        <!-- End Modal Edit User -->
 
                         <div class="modal fade" id="modal-hapus{{ $d->id }}">
                           <div class="modal-dialog">
