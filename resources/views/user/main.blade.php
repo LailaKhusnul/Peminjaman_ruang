@@ -224,29 +224,35 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{ route('dashboarduser') }}" class="nav-link active">
+                <a href="{{ route('dashboarduser') }}" class="nav-link {{ Request::routeIs('dashboarduser') ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Dashboard</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{ route('user.ruangan.index') }}" class="nav-link">
+                <a href="{{ route('user.ruangan.index') }}" class="nav-link {{ Request::routeIs('user.ruangan.index') ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Ruangan</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{ route('peminjamanuser.index') }}" class="nav-link">
+                <a href="{{ route('peminjamanuser.index') }}" class="nav-link {{ Request::routeIs('peminjamanuser.index') ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Peminjaman</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{ route('index') }}" class="nav-link">
+                <a href="{{ route('history-peminjaman.index') }}" class="nav-link {{ Request::routeIs('history-peminjaman.index') ? 'active' : '' }}">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>History</p>
+                </a>
+              </li>
+              <!-- <li class="nav-item">
+                <a href="{{ route('index') }}" class="nav-link {{ Request::routeIs('index') ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Profile</p>
                 </a>
-              </li>
+              </li> -->
               <li class="nav-item">
                 <a href="{{ route('logout') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
@@ -267,7 +273,7 @@
   @yield('content')
   <!-- /.content-wrapper -->
   <footer class="main-footer">
-    <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
+    <strong> &copy; 2024 Peminjaman Ruang Politeknik Negeri Madiun.</strong>
     All rights reserved.
     <div class="float-right d-none d-sm-inline-block">
       <b>Version</b> 3.2.0
@@ -318,18 +324,18 @@
 <script src="{{ asset('lte/dist/js/pages/dashboard.js') }}"></script>
 <!-- Include other body elements -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    <script>
-        @if($errors->any())
-            @foreach ($errors->all() as $error)
-                toastr.error('{{ $error }}');
-            @endforeach
-        @endif
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script>
+    @if($errors->any())
+        @foreach ($errors->all() as $error)
+            toastr.error('{{ $error }}');
+        @endforeach
+    @endif
 
-        @if(session('success'))
-            toastr.success('{{ session('success') }}');
-        @endif
-    </script>
+    @if(session('success'))
+        toastr.success('{{ session('success') }}');
+    @endif
+</script>
 
 @yield('scripts')
 </body>

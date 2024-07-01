@@ -10,10 +10,16 @@ class PeminjamanController extends Controller
 {
     // function peminjaman
     public function peminjaman(Request $request){
-        $data_pinjam = PeminjamanUser::get();
+        $data_pinjam = PeminjamanUser::with(['user', 'ruang'])->get();
 
         if ($request->get('export') == 'pdf'){
-            $pdf = Pdf::loadView('pdf.peminjaman-admin', ['data_pinjam' => $data_pinjam]);
+            $logo_path = public_path('images/logo_poltek.png');
+            $logo_base64 = base64_encode(file_get_contents($logo_path));
+
+            $pdf = Pdf::loadView('pdf.peminjaman-admin', [
+                'data_pinjam' => $data_pinjam,
+                'logo_base64' => $logo_base64
+            ]);
             return $pdf->stream('Data Peminjaman.pdf');
         }
         return view('admin.peminjaman.index',compact('data_pinjam', 'request'));
@@ -23,10 +29,11 @@ class PeminjamanController extends Controller
         return view('admin.create');
     }
 
+    // View admin peminjaman
     public function index()
     {
         $data_pinjam = PeminjamanUser::with(['user', 'ruang'])->where('status', 'pending')->get();
-        return view('admin.peminjaman.index', compact('peminjaman'));
+        return view('admin.peminjaman.index', compact('data_pinjam'));
     }
 
     public function approve($id)

@@ -27,7 +27,7 @@
       <div class="container-fluid">
       <div class="row">
           <div class="col-12">
-          <a href="{{ route('peminjaman.index') }}?export=pdf" class="btn btn-danger mb-3">Export Pdf</a>
+            <a href="{{ route('peminjaman.index') }}?export=pdf" class="btn btn-danger mb-3">Export Pdf</a>
             
             <div class="card">
               <div class="card-header">
@@ -50,7 +50,7 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body table-responsive p-0">
-                <table class="table table-hover text-nowrap" id="serverside">
+                <table class="table table-hover text-nowrap" id="serverside1">
                   <thead>
                     <tr>
                       <th>No</th>
@@ -97,15 +97,13 @@
                                   <button type="submit" class="btn btn-danger"><i class="fas fa-times"></i></button>
                               </form>
                             @endif
-                          </td>
-                          <td>
                               <!-- <a href="{{ route('ruangan.edit',['id' => $d->id]) }}" class="btn btn-primary"><i class="fas fa-pen"></i>Edit</a> -->
                             @if($d->status == 'pending')
                               <!-- Tombol untuk menampilkan modal edit, jika button kotak class="btn btn-primary" -->
                               <a class="text-primary mr-2" data-toggle="modal" data-target="#editPeminjamanModal{{ $d->id }}"><i class="fas fa-pen"></i></a>
                               <a data-toggle="modal" data-target="#modal-hapus{{ $d->id }}" class="text-danger"><i class="fas fa-trash"></i></a>                           
                             @endif
-                            </td>
+                          </td>
                         </tr>
 
                         <!-- Modal Edit Ruang => BELUM DIPERBAIKI-->
@@ -131,17 +129,24 @@
                                     @enderror
                                   </div>
                                   <div class="form-group">
-                                    <label for="fasilitas">Fasilitas</label>
-                                    <input type="text" class="form-control" id="fasilitas" name="fasilitas" value="{{ $d->fasilitas }}">
-                                    @error('fasilitas')
-                                      <small>{{ $message }}</small>
+                                    <label for="tanggal_mulai">Tanggal Mulai Peminjaman</label>
+                                    <input type="date" class="form-control" id="tanggal_mulai" name="tanggal_mulai" placeholder="Pilih Tanggal Mulai Peminjaman">
+                                    @error('tanggal_mulai')
+                                      <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                   </div>
                                   <div class="form-group">
-                                    <label for="lokasi">Lokasi</label>
-                                    <input type="text" name="lokasi" class="form-control" id="lokasi" value="{{ $d->lokasi }}">
-                                    @error('lokasi')
-                                      <small>{{ $message }}</small>
+                                    <label for="tanggal_selesai">Tanggal Selesai Peminjaman</label>
+                                    <input type="date" class="form-control" id="tanggal_selesai" name="tanggal_selesai" placeholder="Pilih Tanggal Selesai Peminjaman">
+                                    @error('tanggal_selesai')
+                                      <small class="text-danger">{{ $message }}</small>
+                                    @enderror
+                                  </div>
+                                  <div class="form-group">
+                                    <label for="kegiatan">Nama Kegiatan</label>
+                                    <input type="text" name="kegiatan" class="form-control" id="kegiatan" placeholder="Masukkan Nama Kegiatan">
+                                    @error('kegiatan')
+                                      <small class="text-danger">{{ $message }}</small>
                                     @enderror
                                   </div>
                                   <div class="modal-footer">
@@ -202,7 +207,7 @@
 
     <script>
       $(document).ready( function () {
-        $('#serverside').DataTable();
+        $('#serverside1').DataTable();
       } ); 
     </script>
 @endsection

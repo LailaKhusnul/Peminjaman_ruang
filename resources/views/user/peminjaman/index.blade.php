@@ -27,7 +27,7 @@
       <div class="container-fluid">
       <div class="row">
         <!-- Filter Data -->
-          <!-- <form action="{{ route('peminjaman.filter') }}" method="GET" class="form-inline">
+          <!-- <form action="" method="GET" class="form-inline">
             <div class="form-group mb-2">
                 <label for="date" class="sr-only">Date</label>
                 <input type="date" class="form-control" id="date" name="date" placeholder="Select Date" value="{{ request('date') }}">

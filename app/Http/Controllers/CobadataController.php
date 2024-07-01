@@ -52,7 +52,7 @@ class CobadataController extends Controller
 
         Storage::disk('public')->put($path,file_get_contents($photo));
 
-        $data['email']      = $request->email;
+        $data['email']      = $request->email;          //'email' dari field database tabel user
         $data['name']       = $request->nama;
         $data['password']   = Hash::make($request->password);
         $data['image']      = $filename;

@@ -223,25 +223,25 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{ route('dashboard') }}" class="nav-link active">
+                <a href="{{ route('dashboardcount') }}" class="nav-link {{ Request::routeIs('dashboardcount') ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Dashboard</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{ route('index') }}" class="nav-link">
+                <a href="{{ route('index') }}" class="nav-link {{ Request::routeIs('index') ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>User</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{ route('ruangan.index') }}" class="nav-link">
+                <a href="{{ route('ruangan.index') }}" class="nav-link {{ Request::routeIs('ruangan.index') ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Ruangan</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{ route('peminjaman.index') }}" class="nav-link">
+                <a href="{{ route('peminjaman.index') }}" class="nav-link {{ Request::routeIs('peminjaman.index') ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Peminjaman</p>
                 </a>
@@ -266,7 +266,7 @@
   @yield('content')
   <!-- /.content-wrapper -->
   <footer class="main-footer">
-    <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
+    <strong> &copy; 2024 Peminjaman Ruang Politeknik Negeri Madiun.</strong>
     All rights reserved.
     <div class="float-right d-none d-sm-inline-block">
       <b>Version</b> 3.2.0

@@ -10,12 +10,13 @@ class PeminjamanUser extends Model
     use HasFactory;
     protected $table = 'peminjamanuser';
     protected $fillable = [
-        'user_id',
+        'id',
         'id_ruang',
         'tanggal_mulai',
         'tanggal_selesai',
         'kegiatan',
         'status',
+        'is_history',
     ];
 
     // Definisi relasi ke model Ruang
@@ -27,6 +28,6 @@ class PeminjamanUser extends Model
     // Definisi relasi ke model User
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id'); // Asumsikan ada kolom 'user_id' yang merujuk ke tabel 'users'
+        return $this->belongsTo(User::class, 'id'); // Asumsikan ada kolom 'user_id' yang merujuk ke tabel 'users'
     }
 }

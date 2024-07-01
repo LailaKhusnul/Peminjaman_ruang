@@ -3,6 +3,8 @@
 namespace App\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use Illuminate\Console\Scheduling\Schedule; // Menambahkan use statement ini
+use App\Jobs\MoveToHistoryJob; // Menambahkan use statement ini
 
 class Kernel extends HttpKernel
 {
@@ -66,4 +68,15 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'role' => \App\Http\Middleware\RoleMiddleware::class,  // perlu membuat RoleMiddleware
     ];
+
+    /**
+     * Define the application's command schedule.
+     *
+     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
+     * @return void
+     */
+    protected function schedule(Schedule $schedule) // Untuk mendefinisikan pekerjaan yang dijadwalkan
+    {
+        $schedule->job(new MoveToHistoryJob)->daily();
+    }
 }

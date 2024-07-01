@@ -8,6 +8,8 @@ use App\Http\Controllers\RuanganController;
 use App\Http\Controllers\PeminjamanController;
 use App\Http\Controllers\PeminjamanUserController;
 use App\Http\Controllers\UserRuanganController;
+use App\Http\Controllers\HistoryPeminjamanUserController;
+use App\Http\Controllers\DashboardUserController;
 
 
 /*t
@@ -45,6 +47,8 @@ Route::middleware(['auth', 'role:admin|wadir'])->group(function() {
     Route::get('/user/edit/{id}', [CobadataController::class, 'edit'])->name('user.edit');   // name untuk mengidentifikasi route ketika di blade/controller, jadi penamaannya bebas
     Route::put('/user/update/{id}', [CobadataController::class, 'update'])->name('user.update');
     Route::delete('/user/delete/{id}', [CobadataController::class, 'delete'])->name('user.delete');
+
+    Route::get('/dashboard', [DashboardUserController::class, 'datacount'])->name('dashboardcount');        //untuk count pengguna
     
 // });
 
@@ -56,8 +60,8 @@ Route::middleware(['auth', 'role:admin|wadir'])->group(function() {
     Route::put('/ruangan/update/{id}', [RuanganController::class, 'update'])->name('ruangan.update');
     Route::delete('/ruangan/delete/{id}', [RuanganController::class, 'delete'])->name('ruangan.delete');
 
-    Route::get('/peminjaman', [PeminjamanController::class, 'peminjaman'])->name('peminjaman.index');
-    Route::get('/peminjamanadmin', [PeminjamanController::class, 'index'])->name('peminjaman.index2');
+    Route::get('/peminjaman', [PeminjamanController::class, 'peminjaman'])->name('peminjaman.index');           // export pdf
+    Route::get('/peminjamanadmin', [PeminjamanController::class, 'index'])->name('peminjaman.index2');          // approve reject
     Route::put('/peminjaman/approve/{id}', [PeminjamanController::class, 'approve'])->name('peminjaman.approve');
     Route::put('/peminjaman/reject/{id}', [PeminjamanController::class, 'reject'])->name('peminjaman.reject');
 });
@@ -66,6 +70,7 @@ Route::middleware(['auth', 'role:admin|wadir'])->group(function() {
 Route::middleware(['auth', 'role:dosen|mahasiswa'])->group(function() {
 //Route::group(['prefix' => 'user','middleware' => ['auth'], 'as' => 'user.'] , function(){
     Route::get('/', [PeminjamanUserController::class, 'dashboarduser'])->name('dashboarduser');  
+    Route::get('history-peminjaman', [HistoryPeminjamanUserController::class, 'index'])->name('history-peminjaman.index');
 
     // Routes untuk User
     Route::get('/user/ruangan', [UserRuanganController::class, 'index'])->name('user.ruangan.index');
