@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\PeminjamanUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
@@ -13,7 +14,9 @@ class CobadataController extends Controller
     //
     public function dashboard(){
         //if(auth()->user()->can('view_dashboard')){
-            return view('dashboard');            
+            $userCount = User::count();                 // Menghitung total user 
+            $totalPeminjaman = PeminjamanUser::count(); // Menghitung total peminjaman
+            return view('dashboard', compact('userCount', 'totalPeminjaman'));            
         //}
         //return abort(403);
     }

@@ -19,7 +19,7 @@
   <!-- /.login-logo -->
   <div class="card card-outline card-primary">
     <div class="card-header text-center">
-      <a href="{{ route('register') }}" class="h1"><b>Admin</b>LTE</a>
+      <a href="{{ route('register') }}" class="h1"><b>Peminjaman </b>Ruang</a>
     </div>
     <div class="card-body">
       <p class="login-box-msg">Halaman Register</p>
@@ -27,33 +27,38 @@
       <form action="{{ route('register-proses') }}" method="post">
         @csrf
         <div class="input-group mb-3">
-          <input type="text" name="nama" class="form-control" placeholder="Nama Lengkap" value="{{ old('nama') }}">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-user"></span>
             </div>
-          </div>          
+          </div>
+          <input type="text" name="nama" class="form-control" placeholder="Nama Lengkap" value="{{ old('nama') }}">          
         </div>
         @error('nama')
           <small>{{ $message }}</small>
         @enderror
         <div class="input-group mb-3">
-          <input type="email" name="email" class="form-control" placeholder="Email" value="{{ old('email') }}">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-envelope"></span>
             </div>
-          </div>          
+          </div>  
+          <input type="email" name="email" class="form-control" placeholder="Email" value="{{ old('email') }}">  
         </div>
         @error('email')
           <small>{{ $message }}</small>
         @enderror
         <div class="input-group mb-3">
-          <input type="password" name="password" class="form-control" placeholder="Password" required>
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>
             </div>
+          </div>
+          <input type="password" name="password" class="form-control" placeholder="Password" id="password" required>
+          <div class="input-group-append">
+            <button type="button" class="btn btn-outline-secondary" id="togglePassword">
+              <i class="fas fa-eye"></i>
+            </button>
           </div>
         </div>
         @error('password')
@@ -61,7 +66,7 @@
         @enderror
         <div class="input-group mb-3">
           <select name="role_type" class="form-control" required>
-            <option value="">Pilih Posisi</option>
+            <option value="" selected hidden>Pilih Posisi</option>
             <option value="dosen" {{ old('role_type') == 'dosen' ? 'selected' : '' }}>Dosen</option>
             <option value="mahasiswa" {{ old('role_type') == 'mahasiswa' ? 'selected' : '' }}>Mahasiswa</option>
           </select>
@@ -77,6 +82,9 @@
           </div>
           <!-- /.col -->
         </div>
+        <p class="mb-0">
+          <br>Sudah Punya Akun?<a href="{{ route('login') }}" class="text-center"> Login</a></br>
+        </p>
       </form>
     </div>
     <!-- /.card-body -->
@@ -99,5 +107,22 @@
     </script>
 @endif
 
+<!-- Tambahkan kode JavaScript untuk password -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const passwordInput = document.getElementById('password');
+      const togglePasswordButton = document.getElementById('togglePassword');
+      const togglePasswordIcon = togglePasswordButton.querySelector('i');
+
+      togglePasswordButton.addEventListener('click', function() {
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+
+        // Toggle icon class
+        togglePasswordIcon.classList.toggle('fa-eye');
+        togglePasswordIcon.classList.toggle('fa-eye-slash');
+      });
+    });
+  </script>
 </body>
 </html>

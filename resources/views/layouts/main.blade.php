@@ -223,7 +223,7 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{ route('dashboardcount') }}" class="nav-link {{ Request::routeIs('dashboardcount') ? 'active' : '' }}">
+                <a href="{{ route('dashboard') }}" class="nav-link {{ Request::routeIs('dashboard') ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Dashboard</p>
                 </a>

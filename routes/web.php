@@ -47,8 +47,6 @@ Route::middleware(['auth', 'role:admin|wadir'])->group(function() {
     Route::get('/user/edit/{id}', [CobadataController::class, 'edit'])->name('user.edit');   // name untuk mengidentifikasi route ketika di blade/controller, jadi penamaannya bebas
     Route::put('/user/update/{id}', [CobadataController::class, 'update'])->name('user.update');
     Route::delete('/user/delete/{id}', [CobadataController::class, 'delete'])->name('user.delete');
-
-    Route::get('/dashboard', [DashboardUserController::class, 'datacount'])->name('dashboardcount');        //untuk count pengguna
     
 // });
 

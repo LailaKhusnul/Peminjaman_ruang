@@ -1,9 +1,41 @@
 @extends('layouts.main')
+<!-- Untuk format tanggal dd-mm-yyyy bagian tbody tabel -->
+@php
+    use Carbon\Carbon;
+@endphp
 @section('css')
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css" />
 @endsection
 @section('content')
 <div class="content-wrapper">
+    <!-- Custom CSS -->
+    <style>
+        .icon-with-text {
+            position: relative;
+            display: inline-block;
+        }
+
+        .icon-with-text .hover-text {
+            visibility: hidden;
+            opacity: 0;
+            position: absolute;
+            left: 50%;
+            top: -10%;
+            transform: translate(-50%, -100%);
+            background-color: rgba(0, 0, 0, 0.75);
+            color: #fff;
+            padding: 5px;
+            border-radius: 5px;
+            white-space: nowrap;
+            transition: visibility 0.2s, opacity 0.2s;
+            z-index: 1;
+        }
+
+        .icon-with-text:hover .hover-text {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
     <!-- Content Header (Page header) -->
     <div class="content-header">
       <div class="container-fluid">
@@ -69,8 +101,8 @@
                           <td>{{ $loop->iteration }}</td>
                           <td>{{ $d->user?->name}}</td>
                           <td>{{ $d->ruang->nama_ruang}}</td>
-                          <td>{{ $d->tanggal_mulai }}</td>
-                          <td>{{ $d->tanggal_selesai }}</td>
+                          <td>{{ Carbon::parse($d->tanggal_mulai)->format('d-m-Y') }}</td>
+                          <td>{{ Carbon::parse($d->tanggal_selesai)->format('d-m-Y') }}</td>
                           <td>{{ $d->kegiatan }}</td>
                           <!-- <td>{{ $d->status }}</td> -->
                           <!-- Untuk menampilkan kondisi dan juga teks yang lebih user-friendly -->
@@ -86,45 +118,49 @@
                           <!-- Untuk memberi aksi kondisi -->
                           <td>
                             @if($d->status == 'pending')
-                              <form action="{{ route('peminjaman.approve', $d->id) }}" method="POST" style="display:inline-block;">
+                              <form action="{{ route('peminjaman.approve', $d->id) }}" method="POST" style="display:inline-block; margin-right: 10px;">
                                   @csrf
                                   @method('PUT')
-                                  <button type="submit" class="btn btn-success"><i class="fas fa-check"></i></button>
+                                  <button type="submit" class="btn btn-success" data-toggle="modal" data-target="#approveModal{{ $d->id }}"><i class="fas fa-check"></i></button>
                               </form>
-                              <form action="{{ route('peminjaman.reject', $d->id) }}" method="POST" style="display:inline-block;">
+                              <form action="{{ route('peminjaman.reject', $d->id) }}" method="POST" style="display:inline-block; margin-right: 10px;">
                                   @csrf
                                   @method('PUT')
-                                  <button type="submit" class="btn btn-danger"><i class="fas fa-times"></i></button>
+                                  <button type="submit" class="btn btn-danger" data-toggle="modal" data-target="#rejectModal{{ $d->id }}"><i class="fas fa-times"></i></button>
                               </form>
                             @endif
                               <!-- <a href="{{ route('ruangan.edit',['id' => $d->id]) }}" class="btn btn-primary"><i class="fas fa-pen"></i>Edit</a> -->
                             @if($d->status == 'pending')
                               <!-- Tombol untuk menampilkan modal edit, jika button kotak class="btn btn-primary" -->
-                              <a class="text-primary mr-2" data-toggle="modal" data-target="#editPeminjamanModal{{ $d->id }}"><i class="fas fa-pen"></i></a>
-                              <a data-toggle="modal" data-target="#modal-hapus{{ $d->id }}" class="text-danger"><i class="fas fa-trash"></i></a>                           
+                              <a class="text-primary icon-with-text mr-2" data-toggle="modal" data-target="#editPeminjamanModal{{ $d->id }}"><i class="fas fa-pen"></i>
+                                  <span class="hover-text">Edit</span>
+                              </a>
+                              <a data-toggle="modal" data-target="#modal-hapus{{ $d->id }}" class="text-danger icon-with-text"><i class="fas fa-trash"></i>
+                                  <span class="hover-text">Hapus</span>
+                              </a>                           
                             @endif
                           </td>
                         </tr>
 
-                        <!-- Modal Edit Ruang => BELUM DIPERBAIKI-->
+                        <!-- Modal Edit Peminjaman => BELUM DIPERBAIKI-->
                         <div class="modal fade" id="editPeminjamanModal{{ $d->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                           <div class="modal-dialog" role="document">
                             <div class="modal-content">
                               <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Form Edit Ruang</h5>
+                                <h5 class="modal-title" id="exampleModalLabel">Form Edit Peminjaman</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                   <span aria-hidden="true">&times;</span>
                                 </button>
                               </div>
                               <div class="modal-body">
-                                <!-- Form untuk mengedit ruangan -->
+                                <!-- Form untuk mengedit peminjaman -->
                                 <form action="{{ route('ruangan.update', ['id' => $d->id]) }}" method="POST">
                                   @csrf
                                   @method('PUT')
                                   <div class="form-group">
-                                    <label for="nama">Nama Ruang</label>
-                                    <input type="text" name="nama" class="form-control" id="nama" value="{{ $d->nama_ruang }}">
-                                    @error('nama')
+                                    <label for="nama_ruang">Nama Ruang</label>
+                                    <input type="text" name="nama_ruang" class="form-control" id="nama_ruang" value="{{ $d->nama_ruang }}">
+                                    @error('nama_ruang')
                                         <small>{{ $message }}</small>
                                     @enderror
                                   </div>
@@ -157,8 +193,59 @@
                             </div>
                           </div>
                         </div>
-                        <!-- End Modal Edit Ruang -->
+                        <!-- End Modal Edit Peminjaman -->
 
+                        <!-- Modal Approve Peminjaman -->
+                        <div class="modal fade" id="approveModal{{ $d->id }}">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Konfirmasi Setujui Peminjaman</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Apakah kamu yakin menyetujui peminjaman ini?</p>
+                                    </div>
+                                    <div class="modal-footer justify-content-between">
+                                        <form action="{{ route('peminjaman.approve', $d->id) }}" method="POST" style="display:inline-block;">
+                                            @csrf
+                                            @method('PUT')
+                                            <button type="submit" class="btn btn-success">Setujui</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Modal Approve Peminjaman -->
+
+                        <!-- Modal Reject Peminjaman -->
+                        <div class="modal fade" id="rejectModal{{ $d->id }}">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">Konfirmasi Tolak Peminjaman</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>Apakah kamu yakin menolak peminjaman ini?</p>
+                                    </div>
+                                    <div class="modal-footer justify-content-between">
+                                        <form action="{{ route('peminjaman.reject', $d->id) }}" method="POST" style="display:inline-block;">
+                                            @csrf
+                                            @method('PUT')
+                                            <button type="submit" class="btn btn-danger">Tolak</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Modal Reject Peminjaman -->
+
+                        <!-- Modal Hapus Peminjaman -->
                         <div class="modal fade" id="modal-hapus{{ $d->id }}">
                           <div class="modal-dialog">
                             <div class="modal-content">
@@ -175,7 +262,6 @@
                                 <form action="{{ route('ruangan.delete',['id' => $d->id]) }}" method="POST">
                                   @csrf
                                   @method('DELETE')
-                                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                   <button type="submit" class="btn btn-primary">Hapus Data</button>
 
                                 </form>
@@ -185,6 +271,7 @@
                           </div>
                           <!-- /.modal-dialog -->
                         </div>
+                        <!-- EndModal Hapus Peminjaman -->
                     @endforeach
 
                   </tbody>

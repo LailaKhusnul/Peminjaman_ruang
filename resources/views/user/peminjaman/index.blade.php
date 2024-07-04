@@ -1,6 +1,11 @@
 @extends('user.main')
+<!-- Untuk format tanggal dd-mm-yyyy bagian tbody tabel -->
+@php
+    use Carbon\Carbon;
+@endphp
 @section('css')
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css" />
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 @endsection
 @section('content')
 <div class="content-wrapper">
@@ -51,7 +56,7 @@
               <div class="modal-dialog" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Form Peminjaman</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Form Tambah Peminjaman</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                     </button>
@@ -64,6 +69,7 @@
                         <label for="id_ruang">Nama Ruang</label>
                         <select name="id_ruang" class="form-control" id="id_ruang">
                           @foreach($data_ruang as $d)
+                            <option value="" selected hidden>Pilih Ruang</option>
                             <option value="{{ $d->id }}">{{ $d->nama_ruang }}</option>
                           @endforeach
                         </select>
@@ -73,14 +79,16 @@
                       </div>
                       <div class="form-group">
                         <label for="tanggal_mulai">Tanggal Mulai Peminjaman</label>
-                        <input type="date" class="form-control" id="tanggal_mulai" name="tanggal_mulai" placeholder="Pilih Tanggal Mulai Peminjaman">
+                        <input type="text" class="form-control" id="display_tanggal_mulai" placeholder="Pilih Tanggal Mulai Peminjaman" readonly>
+                        <input type="hidden" id="tanggal_mulai" name="tanggal_mulai">
                         @error('tanggal_mulai')
                           <small class="text-danger">{{ $message }}</small>
                         @enderror
                       </div>
                       <div class="form-group">
                         <label for="tanggal_selesai">Tanggal Selesai Peminjaman</label>
-                        <input type="date" class="form-control" id="tanggal_selesai" name="tanggal_selesai" placeholder="Pilih Tanggal Selesai Peminjaman">
+                        <input type="text" class="form-control" id="display_tanggal_selesai" placeholder="Pilih Tanggal Selesai Peminjaman" readonly>
+                        <input type="hidden" id="tanggal_selesai" name="tanggal_selesai">
                         @error('tanggal_selesai')
                           <small class="text-danger">{{ $message }}</small>
                         @enderror
@@ -93,7 +101,6 @@
                         @enderror
                       </div>
                       <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary">Submit</button>
                       </div>
                     </form>
@@ -145,8 +152,8 @@
                         <tr>
                           <td>{{ $loop->iteration }}</td>
                           <td>{{ $d->ruang->nama_ruang}}</td>
-                          <td>{{ $d->tanggal_mulai }}</td>
-                          <td>{{ $d->tanggal_selesai }}</td>
+                          <td>{{ Carbon::parse($d->tanggal_mulai)->format('d-m-Y') }}</td>
+                          <td>{{ Carbon::parse($d->tanggal_selesai)->format('d-m-Y') }}</td>
                           <td>{{ $d->kegiatan }}</td>
                           <!-- <td>{{ $d->status }}</td> -->
                           <!-- Untuk menampilkan kondisi dan juga teks yang lebih user-friendly -->
@@ -173,53 +180,7 @@
                           </td>
                         </tr>
 
-                        <!-- Modal Edit Peminjaman User -->
-                        <div class="modal fade" id="editPeminjamanUserModal{{ $d->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                          <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                              <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Form Edit Ruang</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                  <span aria-hidden="true">&times;</span>
-                                </button>
-                              </div>
-                              <div class="modal-body">
-                                <!-- Form untuk mengedit peminjaman user -->
-                                <form action="{{ route('ruangan.update',['id' => $d->id]) }}" method="POST">
-                                  @csrf
-                                  @method('PUT')
-                                  <!-- form start -->
-                                  <div class="form-group">
-                                    <label for="exampleInputEmail1">Nama</label>
-                                    <input type="nama" class="form-control" id="exampleInputEmail1" name="nama" value="{{ $d->nama_ruang }}" placeholder="Enter Nama Ruang">
-                                    @error('nama')
-                                      <small>{{ $message }}</small>
-                                    @enderror
-                                  </div>
-                                  <div class="form-group">
-                                    <label for="exampleInputEmail1">Fasilitas</label>
-                                    <input type="text" name="fasilitas"class="form-control" id="exampleInputEmail1" value="{{ $d->fasilitas }}" placeholder="Enter Fasilitas">
-                                    @error('fasilitas')
-                                      <small>{{ $message }}</small>
-                                    @enderror
-                                  </div>
-                                  <div class="form-group">
-                                    <label for="exampleInputPassword1">Lokasi</label>
-                                    <input type="text" name="lokasi"class="form-control" id="exampleInputPassword1" value="{{ $d->lokasi }}" placeholder="Lokasi">
-                                    @error('lokasi')
-                                      <small>{{ $message }}</small>
-                                    @enderror
-                                  </div>
-                                  <div class="card-footer">
-                                    <button type="submit" class="btn btn-primary">Submit</button>
-                                  </div>
-                                </form>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <!-- End Modal Edit Peminjaman User -->
-
+                        <!-- Modal Hapus Peminjaman User -->
                         <div class="modal fade" id="modal-hapus{{ $d->id }}">
                           <div class="modal-dialog">
                             <div class="modal-content">
@@ -245,6 +206,7 @@
                           </div>
                           <!-- /.modal-dialog -->
                         </div>
+                        <!-- End Modal Hapus Peminjaman User -->
                     @endforeach
 
                   </tbody>
@@ -254,20 +216,123 @@
             </div>
             <!-- /.card -->
           </div>
-        </div>
-        <!-- /.row (main row) -->
+      </div>
+      <!-- /.row (main row) -->
       </div><!-- /.container-fluid -->
     </section>
     <!-- /.content -->
-  </div>
+
+    <!-- Modal Edit Peminjaman User -->
+    @foreach ($data_pinjam as $d)
+        <div class="modal fade" id="editPeminjamanUserModal{{ $d->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Form Edit Peminjaman</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Form untuk mengedit peminjaman user -->
+                        <form action="{{ route('peminjamanuser.update', ['id' => $d->id]) }}" method="POST">
+                            @csrf
+                            @method('PUT')
+                            <!-- form start -->
+                            <div class="form-group">
+                                <label for="id_ruang">Nama Ruang</label>
+                                <select name="id_ruang" class="form-control" id="id_ruang">
+                                    <option value="" selected hidden>Pilih Ruang</option>
+                                    @foreach($data_ruang as $dr)
+                                        <option value="{{ $dr->id }}" {{ $dr->id == $d->id_ruang ? 'selected' : '' }}>{{ $dr->nama_ruang }}</option>
+                                    @endforeach
+                                </select>
+                                @error('id_ruang')
+                                    <small>{{ $message }}</small>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <label for="tanggal_mulai">Tanggal Mulai Peminjaman</label>
+                                <input type="text" class="form-control datepicker" id="tanggal_mulai_{{ $d->id }}" name="tanggal_mulai" value="{{ Carbon::parse($d->tanggal_mulai)->format('d-m-Y') }}">
+                                @error('tanggal_mulai')
+                                    <small>{{ $message }}</small>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <label for="tanggal_selesai">Tanggal Selesai Peminjaman</label>
+                                <input type="text" class="form-control datepicker" id="tanggal_selesai_{{ $d->id }}" name="tanggal_selesai" value="{{ Carbon::parse($d->tanggal_selesai)->format('d-m-Y') }}">
+                                @error('tanggal_selesai')
+                                    <small>{{ $message }}</small>
+                                @enderror
+                            </div>
+                            <div class="form-group">
+                                <label for="kegiatan">Nama Kegiatan</label>
+                                <input type="text" name="kegiatan" class="form-control" id="kegiatan" value="{{ $d->kegiatan }}" placeholder="Masukkan Nama Kegiatan">
+                                @error('kegiatan')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endforeach
+    <!-- End Modal Edit Peminjaman User -->
+
+</div>
 @endsection
 
 @section('scripts')
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     <script>
+      // Untuk Datatable
       $(document).ready( function () {
-          $('#clientside').DataTable();
+          $('#clientside').DataTable(); 
+
+          // Untuk format tanggal
+          function formatDate(date) {   
+              let day = date.getDate();
+              let month = date.getMonth() + 1;
+              let year = date.getFullYear();
+              
+              if (day < 10) day = '0' + day;
+              if (month < 10) month = '0' + month;
+
+              return day + '-' + month + '-' + year;
+          }
+
+          //Bagian edit data
+          $(".datepicker").datepicker({
+              dateFormat: 'dd-mm-yy',
+          });
+          @foreach ($data_pinjam as $d)
+            $("#tanggal_mulai_{{ $d->id }}").datepicker("setDate", "{{ Carbon::parse($d->tanggal_mulai)->format('d-m-Y') }}");
+            $("#tanggal_selesai_{{ $d->id }}").datepicker("setDate", "{{ Carbon::parse($d->tanggal_selesai)->format('d-m-Y') }}");
+          @endforeach
+
+          //Bagian Tabel
+          $("#display_tanggal_mulai").datepicker({
+              dateFormat: 'dd-mm-yy',
+              onSelect: function(dateText) {
+                  const dateObj = $(this).datepicker("getDate");
+                  $("#tanggal_mulai").val(formatDate(dateObj));
+              }
+          });
+
+          $("#display_tanggal_selesai").datepicker({
+              dateFormat: 'dd-mm-yy',
+              onSelect: function(dateText) {
+                  const dateObj = $(this).datepicker("getDate");
+                  $("#tanggal_selesai").val(formatDate(dateObj));
+              }
+          });
       } );
     </script>
 @endsection

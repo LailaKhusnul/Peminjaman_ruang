@@ -4,8 +4,8 @@
 @endsection
 @section('content')
 <div class="content-wrapper">
-  <!-- Custom CSS -->
-  <style>
+    <!-- Custom CSS -->
+    <style>
         .wrap-text {
             white-space: normal;
             word-wrap: break-word;
@@ -73,6 +73,7 @@
                         <td>{{ $d->nama_ruang }}</td>
                         <td>{{ $d->fasilitas }}</td>
                         <td>{{ $d->lokasi }}</td>
+                        <td></td>
                         </tr>
                     @endforeach
 

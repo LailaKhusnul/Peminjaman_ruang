@@ -4,6 +4,34 @@
 @endsection
 @section('content')
 <div class="content-wrapper">
+    <!-- Custom CSS -->
+    <style>
+        .icon-with-text {
+            position: relative;
+            display: inline-block;
+        }
+
+        .icon-with-text .hover-text {
+            visibility: hidden;
+            opacity: 0;
+            position: absolute;
+            left: 50%;
+            top: -10%;
+            transform: translate(-50%, -100%);
+            background-color: rgba(0, 0, 0, 0.75);
+            color: #fff;
+            padding: 5px;
+            border-radius: 5px;
+            white-space: nowrap;
+            transition: visibility 0.2s, opacity 0.2s;
+            z-index: 1;
+        }
+
+        .icon-with-text:hover .hover-text {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
     <!-- Content Header (Page header) -->
     <div class="content-header">
       <div class="container-fluid">
@@ -76,7 +104,7 @@
                       <div class="form-group">
                         <label>Posisi</label>
                         <select name="role_type" class="form-control" required>
-                          <option value="">Pilih Posisi</option>
+                          <option value="" selected hidden>Pilih Posisi</option>
                           <option value="dosen" {{ old('role_type') == 'dosen' ? 'selected' : '' }}>Dosen</option>
                           <option value="mahasiswa" {{ old('role_type') == 'mahasiswa' ? 'selected' : '' }}>Mahasiswa</option>
                         </select>
@@ -144,8 +172,12 @@
                         <td>{{ ucfirst($d->role_type) }}</td>
                         <td>
                             <!-- Tombol untuk menampilkan modal edit -->
-                            <button class="btn btn-primary" data-toggle="modal" data-target="#editUserModal{{ $d->id }}"><i class="fas fa-pen"></i>Edit</button>
-                            <a data-toggle="modal" data-target="#modal-hapus{{ $d->id }}" class="btn btn-danger"><i class="fas fa-trash"></i>Hapus</a>                           
+                            <a class="text-primary icon-with-text mr-2" data-toggle="modal" data-target="#editUserModal{{ $d->id }}"><i class="fas fa-pen"></i>
+                                <span class="hover-text">Edit</span>
+                            </a>
+                            <a data-toggle="modal" data-target="#modal-hapus{{ $d->id }}" class="text-danger icon-with-text"><i class="fas fa-trash"></i>
+                                <span class="hover-text">Hapus</span>
+                            </a>                           
                         </td>
                         </tr>
 
@@ -154,7 +186,7 @@
                           <div class="modal-dialog" role="document">
                             <div class="modal-content">
                               <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Form Edit Ruang</h5>
+                                <h5 class="modal-title" id="exampleModalLabel">Form Edit User</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                   <span aria-hidden="true">&times;</span>
                                 </button>
@@ -188,7 +220,7 @@
                                   <div class="form-group">
                                     <label>Posisi</label>
                                     <select name="role_type" class="form-control" required>
-                                      <option value="">Pilih Posisi</option>
+                                      <option value="" selected hidden>Pilih Posisi</option>
                                       <option value="dosen" {{ old('role_type') == 'dosen' ? 'selected' : '' }}>Dosen</option>
                                       <option value="mahasiswa" {{ old('role_type') == 'mahasiswa' ? 'selected' : '' }}>Mahasiswa</option>
                                     </select>
@@ -206,6 +238,7 @@
                         </div>
                         <!-- End Modal Edit User -->
 
+                        <!-- Modal Hapus User -->
                         <div class="modal fade" id="modal-hapus{{ $d->id }}">
                           <div class="modal-dialog">
                             <div class="modal-content">
@@ -222,7 +255,6 @@
                                 <form action="{{ route('user.delete',['id' => $d->id]) }}" method="POST">
                                   @csrf
                                   @method('DELETE')
-                                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                   <button type="submit" class="btn btn-primary">Hapus Data</button>
 
                                 </form>
@@ -232,6 +264,7 @@
                           </div>
                           <!-- /.modal-dialog -->
                         </div>
+                        <!-- End Modal Hapus User -->
                     @endforeach
 
                   </tbody>

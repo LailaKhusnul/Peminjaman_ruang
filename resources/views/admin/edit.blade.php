@@ -1,3 +1,4 @@
+<!--Jika File ini dihapus tidak pengaruh dengan edit user  yang modal  -->
 @extends('layouts.main')
 @section('content')
 <div class="content-wrapper">
@@ -31,7 +32,7 @@
               <!-- general form elements -->
               <div class="card card-primary">
                 <div class="card-header">
-                  <h3 class="card-title">Form Tambah Ruang</h3>
+                  <h3 class="card-title">Form Edit Ruang</h3>
                 </div>
                 <!-- /.card-header -->
                 <!-- form start -->

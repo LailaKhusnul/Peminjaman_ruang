@@ -32,7 +32,7 @@ class PeminjamanController extends Controller
     // View admin peminjaman
     public function index()
     {
-        $data_pinjam = PeminjamanUser::with(['user', 'ruang'])->where('status', 'pending')->get();
+        $data_pinjam = PeminjamanUser::with(['user', 'ruang'])->get();
         return view('admin.peminjaman.index', compact('data_pinjam'));
     }
 

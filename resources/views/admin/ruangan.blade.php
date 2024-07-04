@@ -11,6 +11,32 @@
             word-wrap: break-word;
             max-width: 250px; /* Dapat menyesuaikan lebar maksimum sesuai kebutuhan */
         }
+
+        .icon-with-text {
+            position: relative;
+            display: inline-block;
+        }
+
+        .icon-with-text .hover-text {
+            visibility: hidden;
+            opacity: 0;
+            position: absolute;
+            left: 50%;
+            top: -10%;
+            transform: translate(-50%, -100%);
+            background-color: rgba(0, 0, 0, 0.75);
+            color: #fff;
+            padding: 5px;
+            border-radius: 5px;
+            white-space: nowrap;
+            transition: visibility 0.2s, opacity 0.2s;
+            z-index: 1;
+        }
+
+        .icon-with-text:hover .hover-text {
+            visibility: visible;
+            opacity: 1;
+        }
     </style>
     <!-- Content Header (Page header) -->
     <div class="content-header">
@@ -125,8 +151,12 @@
                         <td>
                           <!-- <a href="{{ route('ruangan.edit',['id' => $d->id]) }}" class="btn btn-primary"><i class="fas fa-pen"></i>Edit</a> -->
                           <!-- Tombol untuk menampilkan modal edit -->
-                            <a class="text-primary mr-2" data-toggle="modal" data-target="#editRuangModal{{ $d->id }}"><i class="fas fa-pen"></i></a>
-                            <a data-toggle="modal" data-target="#modal-hapus{{ $d->id }}" class="text-danger"><i class="fas fa-trash"></i></a>                           
+                            <a class="text-primary icon-with-text mr-2" data-toggle="modal" data-target="#editRuangModal{{ $d->id }}"><i class="fas fa-pen"></i>
+                                <span class="hover-text">Edit</span>
+                            </a>
+                            <a data-toggle="modal" data-target="#modal-hapus{{ $d->id }}" class="text-danger icon-with-text"><i class="fas fa-trash"></i>
+                                <span class="hover-text">Hapus</span>
+                            </a>                           
                         </td>
                         </tr>
 
@@ -192,7 +222,6 @@
                                 <form action="{{ route('ruangan.delete',['id' => $d->id]) }}" method="POST">
                                   @csrf
                                   @method('DELETE')
-                                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                                   <button type="submit" class="btn btn-primary">Hapus Data</button>
 
                                 </form>

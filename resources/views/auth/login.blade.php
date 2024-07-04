@@ -27,49 +27,50 @@
       <form action="{{ route('login-proses') }}" method="post">
         @csrf
         <div class="input-group mb-3">
-          <input type="email" name="email" class="form-control" placeholder="Email">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-envelope"></span>
             </div>
-          </div>          
+          </div>   
+          <input type="email" name="email" class="form-control" placeholder="Email">      
         </div>
         @error('email')
           <small>{{ $message }}</small>
         @enderror
         <div class="input-group mb-3">
-          <input type="password" name="password" class="form-control" placeholder="Password">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>
             </div>
+          </div>
+          <input type="password" name="password" class="form-control" placeholder="Password" id="password">
+          <div class="input-group-append">
+            <button type="button" class="btn btn-outline-secondary" id="togglePassword">
+              <i class="fas fa-eye"></i>
+            </button>
           </div>
         </div>
         @error('password')
           <small>{{ $message }}</small>
         @enderror
         <div class="row">
-          <div class="col-8">
+          <!-- <div class="col-8">
             <div class="icheck-primary">
               <input type="checkbox" id="remember">
               <label for="remember">
                 Remember Me
               </label>
             </div>
-          </div>
+          </div> -->
           <!-- /.col -->
-          <div class="col-4">
+          <div class="col-12">
             <button type="submit" class="btn btn-primary btn-block">Sign In</button>
           </div>
           <!-- /.col -->
         </div>
       </form>
-
-      <p class="mb-1">
-        <a href="forgot-password.html">I forgot my password</a>
-      </p>
       <p class="mb-0">
-        <a href="{{ route('register') }}" class="text-center">Register a new membership</a>
+        <br>Belum Punya Akun?<a href="{{ route('register') }}" class="text-center"> Daftar</a></br>
       </p>
     </div>
     <!-- /.card-body -->
@@ -97,5 +98,23 @@
         Swal.fire('{{ $message }}');
     </script>
 @endif
+
+<!-- Tambahkan kode JavaScript untuk password -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const passwordInput = document.getElementById('password');
+      const togglePasswordButton = document.getElementById('togglePassword');
+      const togglePasswordIcon = togglePasswordButton.querySelector('i');
+
+      togglePasswordButton.addEventListener('click', function() {
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+
+        // Toggle icon class
+        togglePasswordIcon.classList.toggle('fa-eye');
+        togglePasswordIcon.classList.toggle('fa-eye-slash');
+      });
+    });
+  </script>
 </body>
 </html>
